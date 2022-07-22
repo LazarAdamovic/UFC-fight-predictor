@@ -1,24 +1,34 @@
 import scrapy
 
-class fighterspider(scrapy.Spider):
-    name = 'fighters'
-    start_urls= ['http://www.ufcstats.com/fighter-details/bf0e700106d00e55']
+class fighterspider2(scrapy.Spider):
+    name = 'fighters2'
+    start_urls= ['http://www.ufcstats.com/fighter-details/41e83a89929d1327']
     
     def parse(self, response):
-        
+                
+        #name
         name = response.css('span.b-content__title-highlight::text').get().strip()
-        win_loss_tie = response.css('span.b-content__title-highlight::text').get().strip()
         
+        #win/loss/tie record
+        win_loss_tie = response.css('span.b-content__title-record::text').get().strip()
+        wlt_lst=win_loss_tie.split('-')
+        win=wlt_lst[0].replace('Record: ', '')
+        loss=wlt_lst[1]
+        tie=wlt_lst[2]
+        
+        #stats
         lst= response.css('li.b-list__box-list-item_type_block::text').getall()
         lst = [s.strip() for s in lst]
         
-    
-        yield {
+        #return fighter stats
+        yield { 
             'name': name,
-            'win_loss_tie': win_loss_tie,
+            'win': win,
+            'loss': loss,
+            'tie': tie,
             'height_ft': lst[1],
-            'weight_lbs': lst[3].replace('lbs', ''),
-            'reach_inch': lst[5],
+            'weight_lbs': lst[3].replace(' lbs.', ''),
+            'reach_inch': lst[5].replace('"', ''),
             'stance': lst[7],
             'dob': lst[9],
             'slpm': lst[11],
