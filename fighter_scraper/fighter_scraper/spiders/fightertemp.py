@@ -1,13 +1,15 @@
-import scrapy
+import scrapy 
 
-class fighterspider2(scrapy.Spider):
+class fighterspider2(scrapy.Spider): # my first spider scrape!
     name = 'fighters2'
-    start_urls= ['http://www.ufcstats.com/fighter-details/41e83a89929d1327']
+    start_urls= ['http://www.ufcstats.com/fighter-details/41e83a89929d1327'] # should be http://www.ufcstats.com/statistics/fighters
+    #start url works somehow but not sure how
     
     def parse(self, response):
         
         for link in response.css('a.b-link::attr(href)').getall():
-            yield response.follow(link, self.parse) # need to change this one
+            yield response.follow(link, self.parse) # need to change this one as i keep on getting duplicates. however i can fix it in pandas 
+            
             #name
             name = response.css('span.b-content__title-highlight::text').get().strip()
             
@@ -19,8 +21,8 @@ class fighterspider2(scrapy.Spider):
             tie=wlt_lst[2]
             
             #stats
-            lst= response.css('li.b-list__box-list-item_type_block::text').getall()
-            lst = [s.strip() for s in lst]
+            lst= response.css('li.b-list__box-list-item_type_block::text').getall() # needed to create a list to get the stats
+            lst = [s.strip() for s in lst] 
             
             #return fighter stats
             yield { 
