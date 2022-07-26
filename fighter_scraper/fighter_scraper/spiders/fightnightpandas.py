@@ -18,7 +18,6 @@ class fightnightpandas(scrapy.Spider):
         
         yield from response.follow_all(response.css('a.b-link::attr(href)'), self.parse)
 
-        #df = pd.read_html(response.url)[0]
     
         yield {
         'date': response.css('li.b-list__box-list-item::text')[1].get().strip(),
