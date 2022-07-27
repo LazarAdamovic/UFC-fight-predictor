@@ -24,4 +24,4 @@ class fightnightpandas(scrapy.Spider):
         'location': response.css('li.b-list__box-list-item::text')[3].get().strip(),
         'link' : response.url
             
-            }
+            }   
